@@ -1,0 +1,13 @@
+/* Rules for editing with the page.xhtml XTiger XML template */
+
+div.t_row {
+  clear: left;
+}
+
+div.t_menu {
+  float: left;
+  width: 100px;
+}
+
+
+

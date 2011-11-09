@@ -1,0 +1,45 @@
+<html xmlns:site="http://oppidoc.com/oppidum/site" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>Tutorial Oppidum</title>
+    		<site:link force="true">  
+    			<link rel="stylesheet" href="../resources/css/site.css" type="text/css" charset="utf-8"/>
+    		</site:link>  
+    		<site:script force="true"/>  
+    </head>
+    <body>
+        <header>
+          <p>
+            <site:home force="true"><a href="#">Home</a></site:home>
+            <site:menu/>
+          </p>
+          <p id="login">
+            <site:login force="true"><a href="login">LOGIN</a></site:login>
+          </p>
+        </header>
+        <nav>
+          <p>Chapitres</p>
+          <ul>
+          <site:navigation force="true">
+              <li><a href="page1">Page 1</a></li>
+              <li><a href="page2">Page 2</a></li>
+          </site:navigation>          
+          </ul>
+        </nav>
+        <div id="error" condition="has-error"> 
+  		    <site:error force="true"/>
+  		  </div>
+        <div id="message" condition="has-message"> 
+  		    <site:message force="true"/>
+  		  </div>
+  		  <div id="content">
+          <site:content>
+            <h1>Contenu</h1>
+            <p>Lore ipsum...</p>
+          </site:content>
+        </div>
+        <footer>
+            <p>&#169; 2011 Oppidoc</p>
+        </footer> 
+    </body>
+</html>

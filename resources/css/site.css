@@ -1,0 +1,55 @@
+body {
+  margin: 2.5em 1em 0 1em;
+}
+
+header {
+  position: absolute;
+  width: 100%;
+  top: 0;
+}
+
+header p {
+  margin-top: 0.5em;
+}
+
+#login {
+  position: absolute;
+  top: 0.5em;
+  right: 2em; 
+  margin: 0; 
+}
+
+nav {
+  padding: 10px;
+  margin-top: 0;
+  border: solid 1px gray;
+  width: 90px;
+  float: right;
+}
+
+nav p {
+  margin: 0 0 0.5em 0;
+  text-decoration: underline;
+}
+
+nav ul {
+  padding: 0;
+  margin: 0;
+  list-style: none outside;
+}
+
+div#content {
+  margin-right: 130px;
+}
+
+div#content h1 {
+  margin-top: 10px;
+}  
+
+footer {
+  border-top: solid 1px black;
+  text-align: center;
+  margin: 2em 35%;
+  font-size: 75%;
+}
+

@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:xt="http://ns.inria.org/xtiger">
+<head>                  
+  <!-- Use UTF-8 and avoid the xml protocol declaration at the top for Internet Explorer -->
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=8;" />   
+  <meta name="description" content="XTiger XML document template" />
+  <meta name="keywords" content="template, XTiger" />
+
+  <title>Template de page</title>
+
+  <xt:head version="1.1" templateVersion="1.0" label="Page">    
+  
+    <xt:component name="t_parag" i18n="Text">  
+      <p><xt:use types="text" param="type=textarea;shape=parent-110px">Cliquez pour éditer un paragraphe</xt:use></p>
+    </xt:component> 
+    
+    <xt:component name="t_illustration" i18n="Figure">
+      <div>
+        <xt:attribute types="photo" name="src" default="" param="display=above;trigger=click;photo_URL=./images"/>
+      </div>
+    </xt:component>
+    
+    <xt:component name="t_row">
+      <div class="t_row">
+        <div class="t_menu">
+          <xt:menu-marker target="t_select"/><br/>
+          <xt:menu-marker/>
+        </div>
+        <xt:use types="t_parag t_illustration" label="Parag Illustration" param="name=t_select"/>
+      </div>
+    </xt:component>
+  
+  </xt:head>
+  
+  <!-- testing purpose -->
+	<link rel="stylesheet" href="../resources/css/page.css" type="text/css" charset="utf-8"/>
+</head>
+<body>
+  <h1><xt:use types="text" label="Title">Titre de la page</xt:use></h1>
+  
+  <xt:repeat minOccurs="0" maxOccurs="*" pseudoLabel="Parag Illustration">
+    <xt:use types="t_row"/>
+  </xt:repeat>
+</body>
+</html>               
