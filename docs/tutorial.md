@@ -3,9 +3,9 @@ Faire un site Web avec Oppidum
 
 Par Stéphane Sire
 
-Version du 8 novembre 2011
+Version du 10 novembre 2011
 
-Ce document présente une méthode de travail à suivre pour créer des sites Web avec Oppidum. Il s'appuie sur le site __tutorial__ qui l'accompagne. 
+Ce document présente une méthode de travail à suivre pour créer des sites Web avec Oppidum. Il s'appuie sur l'application __tutorial__ qui l'accompagne. 
 
 Le tutorial est un mini-site avec 1 page d'accueil `/home` éditable, et un catalogue `/chapitres/{nb}` dans lequel il est possible d'ajouter et de modifier des pages identifiées par un numéro. 
 
@@ -13,18 +13,39 @@ Toutes les pages utilisent le même gabarit avec un lien vers l'accueil (sauf su
 
 Seul l'utilisateur admin, ou membre (mot de passe *test*) sont autorisés à modifier / ajouter des pages. Les pages utilisent toutes le même template XTiger XML qui permet de télécharger des images.
 
-Le premier chapitre “Installation et lancement du tutorial” explique comment lancer le tutorial. Les chapitres suivants expliquent pas à pas comment le tutorial a été créé. C'est la même démarche qu'il faut suiver pour créer un nouveau site Web avec Oppidum. 
+Le premier chapitre “Installation et lancement du tutorial” explique comment lancer le tutorial et donne quelques conseils sur l'environnement de développement. Les chapitres suivants expliquent pas à pas comment le tutorial a été créé. C'est la même démarche qu'il faut suivre pour créer un nouveau site Web avec Oppidum. 
 
 Installation et lancement du tutorial
 -------------------------------------
 
 ###Pré-requis###
 
+####Base de données eXist####
+
 Vous devez installer [eXist](http://www.exist-db.org/) (version 1.4.1). Au cours de l'installation eXist vous demandera de choisir le répertoire où il créera le répertoire `data` contenant toute la base de données (vous pouvez laisser le choix par défaut). Il vous demandera également de fixer le mot de passe de l'utilisateur `admin`. 
 
 > Attention si vous installez plusieurs BD eXist en même temps, ne mettez pas leurs base de données au même endroit, vous risquez ensuite d'avoir un message d'erreur lors du lancement d'eXist à propos de problèmes de *locks*.
 
-Pour les utilsateurs de Macintosh nous recommandons d'utiliser l'éditeur de texte [TextMate](http://macromates.com/) (payant) ou à défaut [TextWrangler](http://www.barebones.com/products/textwrangler/) (gratuit). Ces deux éditeurs sont très pratiques car ils permettent d'accéder à l'arborescence de l'ensemble d'un répertoire si celui-ci est ouvert par glisser-déposer de l'icone du répertoire sur celle de l'éditeur.
+####Librairie Javascript AXEL####
+
+Nous vous recommandons d'installer la distribution d'AXEL quelque part sur votre ordinateur pour mettre au point les templates XTiger XML. Celle-ci est disponible sur [GitHub](https://github.com/ssire/axel). Utilisez la commande `git` pour la récupérer:
+
+      git clone git://github.com/ssire/axel.git
+      
+ou bien récupérez directement une archive .ZIP à l'aide du bouton *ZIP* sur la page du projet sur GitHub si vous n'avez pas la commande Git et ne souhaitez pas l'installer.
+
+Lorsque la distribution AXEL est installée, ouvrez le fichier `editor/editor.xhtml` dans Firefox. Suivez alors les instructions affichées pour modifier `security.fileuri.strict_origin_policy` et le mettre à `false`. Vous pourrez alors utiliser les boutons *Browse*, *Save* et *Load* pour choisir un fichier template XTiger XML à transformer dans l'éditeur, sauvegarder les données XML en cours d'édition dans un fichier et charger des données XML depuis un fichier dans l'éditeur (attention cette dernière fonction est à effectuer 1 seule fois après la transformation du template choisi en éditeur).
+
+Par exemple essayez d'ouvrir le template `templates\page.xhtml` du tutorial (appuyez sur *Visualize* pour le transformer), vous devriez obtenir quelque chose comme la figure suivante :
+
+<p style="text-align: center">
+  <img src="images/axel.png" style="max-width: 16cm"/><br/>
+  <span class="legend">Test du template “templates/page.xhtml” du tutorial avec l'éditeur d'AXEL</span>
+</p>  
+
+####Éditeur(s) de texte####
+
+Pour les utilisateurs de Macintosh nous recommandons d'utiliser l'éditeur de texte [TextMate](http://macromates.com/) (payant) ou à défaut [TextWrangler](http://www.barebones.com/products/textwrangler/) (gratuit). Ces deux éditeurs sont très pratiques car ils permettent d'accéder à l'arborescence de l'ensemble d'un répertoire si celui-ci est ouvert par glisser-déposer de l'icone du répertoire sur celle de l'éditeur.
 
 Pour TextMate il est possible d'installer un bundle XQuery qui reconnaît la syntaxe XQuery (très pratique). Le bundle est disponible par svn sur  `http://svn.textmate.org/trunk/Review/Bundles/XQuery.tmbundle/`.
     
@@ -40,14 +61,23 @@ Ensuite il faut associer les fichiers XQuery (extensions `.xql` ou .xqm`) avec l
 
 Il est également possible d'installer pour TextMate un plugin [XMLMate](http://ditchnet.org/xmlmate/) qui offre une palette dans le menu *Window* qui peut servir à évaluer des XPath sur le fichier XML ouvert dans la fenêtre de premier plan. De même le plugin [TeXSLMate](http://ditchnet.org/texslmate/) offre une palette pour debugger les scripts XSLT / XQUery (mais sans les modules propres à eXist). Dans les deux cas double cliquez sur le fichier `.plugin` pour l'installer dans TextMate.
 
-Sinon vous pouvez également utiliser l'éditeur [Oxygen](http://www.oxygenxml.com/) (payant). Dans ce cas nous vous recommandons également de suivre les instruction pour [configurer une connection eXist](http://www.oxygenxml.com/doc/ug-editor/tasks/configure-exist-connection.html).
-
+Sinon vous pouvez également utiliser l'éditeur [Oxygen](http://www.oxygenxml.com/) (payant). Dans ce cas nous vous recommandons également de suivre les instruction pour [configurer une connection eXist](http://www.oxygenxml.com/doc/ug-editor/tasks/configure-exist-connection.html) qui vous permettra de voir directement le contenu de la BD dans l'éditeur Oxygen.
 
 ###Lancement###
 
-Installez eXist. Dans le répertoire `webdav` créez un répertoire `projets`. Dans le répertoire `projet`, placez le répertoire `oppidum` de la distribution Oppidum, et placez à côté le répertoire `tutorial` de la distribution du tutorial.
+Installez eXist. Dans le répertoire `webapp` de eXist créez un répertoire `projets`. Dans le répertoire `projet`, placez le répertoire `oppidum` de la distribution Oppidum, et placez à côté le répertoire `tutorial` de la distribution du tutorial. Si le répertoire où vous avez installé eXist s'appelle `exist-1.4.1`, vous devriez obtenir l'arborescence suivante : 
 
-Vous pouvez alors lancer eXist avec la procédure standard ou bien en exécutant le script `start.sh` qui se trouve dans le répertoire `oppidum/scripts` à l'aide du terminal.
+    $ ls -1 projets/
+    oppidum
+    tutorial
+    $ pwd
+    {...}/exist-1.4.1/webapp
+
+Vous pouvez alors lancer eXist avec la procédure standard ou bien en exécutant le script `start.sh` qui se trouve dans le répertoire `oppidum/scripts` à l'aide du terminal :
+
+    $cd projets/oppidum/scripts/
+    $ ./start.sh 
+    Starting eXist server with output redirected to 'server.log'
 
 Vous pouvez alors accéder au tutorial avec l'URL :
 
@@ -63,7 +93,7 @@ L'intérêt d'installer Oppidum et le tutorial dans sous-répertoire `projets` e
 
 ###Installation des données initiales du site dans la BD###
 
-Ouvrez l'URL suivante :
+Lorsque eXist est lancé, ouvrez l'URL suivante :
 
     http://localhost:8080/exist/projets/tutorial/install
     
@@ -74,11 +104,9 @@ Il faudra alors vous identifier comme admin avec le mot de passe défini lors de
   <span class="legend">Page d'installation du site tutorial</span>
 </p>  
 
-Dans la ligne *Data :* sélectionnez alors tous les modules (default, config, data, mesh et templates), puis cliquez sur le bouton *Install*.
+Dans la ligne *Data :* sélectionnez alors tous les modules (default, config, data, mesh et templates), puis cliquez sur le bouton *Install*. Vous devriez ensuite pouvoir utiliser normalement l'application tutorial. 
 
-Vous devriez ensuite pouvoir utiliser normalement l'application tutorial. 
-
-Notez que la ressource `/install` est utilisable seulement en développement, elle sera normalement désactivée en production.
+Notez que la ressource `/install` est utilisable seulement en développement, elle doit être normalement désactivée en production.
 
 ###Arrêt###
 
@@ -93,20 +121,34 @@ Notez (idem pour le lancement) que les scripts `start.sh` et `stop.sh` ne foncti
      
 ###Accès au contenu de la BD###
 
-Une fois eXist lancé vous pouvez accéder au contenu de la base de données en lecture directement depuis le navigateur Web avec des URLs de la forme :
+Lorsque eXist est lancé vous pouvez accéder au contenu de la base de données de plusieures manières :
 
-    http://localhost:8080/exist/rest/db
+  1. afficher le contenu de la BD en lecture seule avec le navigateur Web en ouvrant des URLs de la forme :
 
-Vous pouvez également utiliser le client Java d'administration de eXist. 
+        http://localhost:8080/exist/rest/db
 
-Si vous utilisez Oxygen vous pouvez utiliser la connexion eXist (cf. ci-dessus).
+  2. utiliser le client Java d'administration de eXist
 
-Les deux dernière méthode permettent aussi de créer des collection et des ressources, et de modifier les droits d'accès.
+  3. avec la connexion eXist dans l'éditeur Oxygen (cf. ci-dessus)
+
+Les deux dernières méthodes permettent aussi de créer des collections et des ressources, et de modifier les droits d'accès.
 
 Notez que la première méthode peut ne pas fonctionner si l'on a modifié la configuration de eXist pour empêcher l'accès au contenu de la BD, ce qui devrait être le cas en production.    
 
-Première étape : création de la configuration du site
+Première étape : la configuration du site
 ------------------------------------
+
+La configuration du site est un ensemble de fichiers et de données qui se trouvent dans le répertoire de l'application et qui servent à initialiser la base de données du site pour qu'elle puisse fonctionner avec Oppidum.
+
+Elle comporte les éléments suivants :
+
+- des ressources (fichiers CSS, Javascript, etc.)
+- un ou plusieurs gabarits
+- des messages d'erreur localisés
+- des contenus de page initiaux
+- des tempales XTiger XML pour éditer les pages
+
+Tous ces éléments sont recopiés dans la base de données par un script d'installation.
 
 ###Les ressources###
 
@@ -116,7 +158,7 @@ Le tutorial contient une unique ressource `site.css` placée dans le répertoire
 
 ###Le gabarit###
 
-Le gabarit (ou __mesh__) est un fichier XHTML qui définit le présentation finale de une ou plusieurs pages du site incluant tous les éléments navigationnels et informatifs (trail, menus, en-tête, pied de page, etc.).
+Le gabarit (ou __mesh__) est un fichier XHTML qui définit le présentation finale de une ou plusieurs pages du site incluant tous les éléments navigationnels et informatifs (chemin de navigation, menus, en-tête, pied de page, etc.).
 
 Il peut exister un ou plusieurs gabarits pour un site Web (ex: un gabarit pour les pages standards et un gabarit pour les erreurs de page non trouvées). Le nom du fichier (sans le suffixe) correspond au nom de l'attribut `@epilogue` utilisé dans le _mapping_ du site.
 
@@ -126,7 +168,7 @@ Ouvrez directement le gabarit depuis le système de fichier dans votre navigateu
 
 <p style="text-align: center">
   <img src="images/gabarit.png" style="max-width: 16cm"/><br/>
-  <span class="legend">Test du gabarit du site</span>
+  <span class="legend">Test du gabarit du site “mesh/standard.html” avec Firefox</span>
 </p>  
 
 Lors du rendu du gabarit, chaque élément spécial est remplacé soit par le contenu correspondant de la vue transmise à l'épilogue (c-a-d le document `<site:view>`), soit par le résultat d'une fonction XQuery de même nom définie dans l'épilogue, soit supprimé.
@@ -161,7 +203,7 @@ Et si elle ne contient pas d'élément `<site:content>`, le résultat sera:
 
 Comme le montre l'illustration ci-dessus, il est permis de mettre du contenu HTML sous les éléments spéciaux du gabarit. Ceci est très pratique lors de l'intégration d'un site Web pour __tester__ le gabarit en l'ouvrant directement dans un navigateur Web. Ce contenu ne sera pas repris par l'épilogue.
 
-Ainsi le gabarit `standard.html` du tutorial contient un fragment `<site:link>` conçu pour inclue le fichier CSS du site : 
+Ainsi le gabarit `standard.html` du tutorial contient un fragment `<site:link>` conçu pour inclure le fichier CSS du site : 
 
     <site:link force="true">  
     	<link rel="stylesheet" href="../resources/css/site.css" type="text/css" charset="utf-8"/>
@@ -171,57 +213,65 @@ Le lien relatif vers le fichier CSS sert ici uniquement à tester le gabarit com
 
 L'attribut `force="true"` placé sur l'élément spécial du gabarit force l'appel de la méthode que la vue contienne ou non un fils de même nom.
 
-Si vous parcourez le fichier `epilogue.xql` du tutorial, vous pouvez constater ainsi que la plupart des modules du gabarit sont en fait générés dynamiquement par des fonctions XQuery dans l'épilogue (c'est la cas du _trail_ `Home`, du lien `LOGIN` ou du menu `Chapitres` par ex).
+Si vous parcourez le fichier `epilogue.xql` du tutorial, vous constaterez que la plupart des modules du gabarit sont en fait générés dynamiquement par des fonctions XQuery dans l'épilogue (c'est la cas du chemin de navigation `Home`, du lien `LOGIN` ou du menu `Chapitres` par ex).
+
+Le gabarit du tutorial contient également des éléments `div` avec un attribut `condition` pour générer des boites pour afficher les messages d'erreur ou les messages d'informations créés par les méthodes `oppidum:add-error` et `oppidum:add-error` lors de l'exécution du pipeline.
+
+Par exemple pour les messages d'erreur, le fragment : 
+
+    <div id="error" condition="has-error"> 
+      <site:error force="true"/>
+    </div>
+
+appelle la fonction `site:error` de l'épilogue quel que soit le contenu de la vue (attribut `force="true"`). Par contre la condition `has-error` n'insère la div que s'il y a des erreurs.
 
 ###Les messages d'erreur###
 
-L'élément `div` servant à afficher les erreurs utilise un attribut `condition`. Celui-ci a le contenu prédéfini `has-error`. Il s'agit d'une condition qui sera vraie si l'exécution du pipeline a engendré des messages d'erreur avec la méthode `oppidum:add-error`. Si la condition est fausse, l'élément `div` lui-même ne sera pas ajouté dans la page.
+La configuration du site comprend également le texte des messages d'erreur dans un fichier XML conventionnellement appelé `errors.xml` et qui se trouve dans le répertoire `init`. Pour chaque type d'erreur, ce fichier comprend un enregistrement de la forme :
 
-<div id="error" condition="has-error"> 
-  <site:error force="true"/>
-</div>
+    <error type="URI-NOT-FOUND" code="404">
+      <message lang="fr">La page demandée n'existe pas</message>
+      <message lang="en">Page does not exist</message>
+    </error>
 
-###Les données initiales###
+Le tutorial n'ajoutant pas de type d'erreur supplémentaire à ceux définis par défaut par Oppidum, il n'a pas de fichier d'erreurs.
 
-De manière similaire à l'élément `div` pour les messages d'erreur, l'élément `div' pour les messages porte une condition `has-message`. Celle-ci bloquera le rendu de la `div` si aucun message n'a été enregistré avec la méthode `oppidum:add-message` au cours de l'exécution du pipeline.
+###Les contenus de pages initiaux###
 
-<div id="message" condition="has-message"> 
-  <site:message force="true"/>
-</div>
+Vous pouvez également fournir des contenus initiaux pour les pages du site. Par convention nous recommandons de placer ces contenus dans un répertoire `init`. Dans le cas du tutorial celui-ci contient une seule page initiale `home.xml`.
+
+###Les templates XTiger XML###
+
+Les templates sont par convention dans le répertoire `templates`.
+
+Suivant les cas il se peut que vous deviez installer les templates dans la base de données pour pouvoir les utiliser en développement (en test et en production ils seront toujours dans la BD). Dans ce cas ils font partie de la configuration du site. 
+
+C'est le cas dans le tutorial où le seul template `page.xhtml` doit être servi après transormation par la transformation XSLT `templates/filter.xsl`. Le but de cette transformation est d'ajouter un paramètre `photo_base` qui sert à afficher les images téléchargées pendant l'édition, et dont l'URL dépend du contexte d'exécution de l'application (paramètre `xslt.base-url`).
 
 ###Le script d'installation###
 
-Par convention le script d'installation est un script XQuery appelé `install.xql` à placer dans le répertoire `scripts`. Ce script est invoqué par une ressource `/install` déclarée dans le mapping (cf. infra).
+Le script d'installation copie la configuration du site dans la BD. Par convention le script d'installation est un script XQuery appelé `install.xql` à placer dans le répertoire `scripts`. Ce script est invoqué par une ressource *`/install`* déclarée dans le mapping (cf. infra).
 
-Le script d'installation copie certains fichiers de configuration et resources du site depuis le répertoire du tutorial vers la base de données dans une collection mère `/db/sites/tutorial`. 
+Le script d'installation du tutorial copie la configuration dans une collection mère `/db/sites/tutorial` dans la BD.
 
 Notez que le script d'installation crée aussi le ou les premiers utilisateurs et met les droits d'accès sur les collections et les ressources de la BD. 
 
-Le script d'installation copie aussi le code de l'application dans une collection mère `/db/www/tutorial`. 
+Le script d'installation copie aussi le code de l'application dans une collection mère `/db/www/tutorial`, mais ce n'est pas nécessaire en développement où le code est exécuté depuis le répertoire sur disque de l'application.
 
 Le script d'installation consiste en réalité en 1 seule ligne qui invoque une fonction fournie par Oppidum : 
 
     install:install("projets/tutorial", $policies, $site, $code, "Tutorial")
+    
+Le premier paramètre indique le chemin jusqu'au tutorial depuis le répertoire `webapp` de eXist.
   
-La description des utilisateurs, des collection, des ressources à créer et des permissions associées s'effectue de manière déclarative dans les trois variables `$policies`, `$site`, `$code` dans le namespace `"http://oppidoc.com/oppidum/install"` :
+La description des utilisateurs, des collection, des ressources à créer et des permissions associées s'effectue de manière déclarative dans les trois variables `$policies`, `$site`, `$code` dans le namespace `"http://oppidoc.com/oppidum/install"`. Elle suit un syntaxe expliquée dans le guide d'Oppidum.
 
-    declare variable $policies := <policies xmlns="http://oppidoc.com/oppidum/install">
-      ...
+Le dernier paramètre est le titre de la fenêtre.
 
-    declare variable $site := <site xmlns="http://oppidoc.com/oppidum/install">
-      ...
-
-    declare variable $code := <code xmlns="http://oppidoc.com/oppidum/install">
-      ...
-
-La syntaxe à employer pour chacune de ces variables est décrite dans la manuel Oppidum.
-      
-Il faut installer les données et le code avant de créer une sauvegarde de la base de données dans un fichier __.zip__. C'est cette sauvegarde qui sera restorée dans la base de donnée pour installer l'application sous Tomcat en test ou en production (cf. la rubrique packaging).
-
-Deuxième étape : création de l'épilogue
+Deuxième étape : l'épilogue
 ----------------
 
-L'epilogue est le fichier `epilogue.xql` du tutorial. 
+L'epilogue est le fichier **`epilogue.xql`** du tutorial. Chqaue application Oppidum doit définir un tel fichier à la racine.
 
 ###Structure de l'épilogue###
 
@@ -231,39 +281,56 @@ L'association entre les éléments spéciaux et les fonctions XQuery s'effectue 
 
     declare function site:branch( $cmd as element(), $source as element(), $view as element()* ) as node()*
 
-La création de l'épilogue se résume à créer les fonctions de rendu associées avec chaque élément spécial du gabarit. Dans la suite de cette section nous reprenons brièvement les fonctions utilisées dans le tutorial.
+La création de l'épilogue se résume à créer les fonctions de rendu associées avec chaque élément spécial du gabarit. Dans la suite de cette section nous reprenons brièvement les fonctions utilisées dans le tutorial. Chaque application est libre de définir les fonctions qui lui conviennent en fonction des gabarits qu'il utilisés.
 
 ###Ajouter des liens vers les CSS###
 
-La fonction `site:link` rend l'élément `<site:link>` du gabarit :
+Le tutorial définit une fonction `site:link` pour générer l'élément `<site:link>` du gabarit :
 
     declare function site:link( $cmd as element(), $view as element() ) as element()*1
     
-Elle retourne le ou les liens CSS générés dynamiquement suivant la commande (donc la page courante).
-
-Elle utilise la fonction `epilogue:css-link` d'Oppidum pour intégrer des liens vers les fichiers CSS de la librairie AXEL ou jQuery fournies en standard avec Oppidum, ou bien vers les fichiers CSS contenus dans les ressources du tutorial.
+Cette fonction retourne un ou plusieurs liens CSS générés dynamiquement suivant la commande (donc la page courante). Elle utilise la fonction `epilogue:css-link` d'Oppidum pour intégrer des liens vers les fichiers CSS de la librairie AXEL ou jQuery fournies en standard avec Oppidum, ou bien vers les fichiers CSS contenus dans le répertoire `resources` du tutorial.
 
 ###Ajouter des scripts Javascripts####
 
-La fonction `site:scripts` est semblable à la fonction `site:link` mais pour les scripts Javascript à inclure dans la page. 
+Le tutorial définit une fonction `site:scripts` semblable à la fonction `site:link` mais pour les scripts Javascript à inclure dans la page. 
 
-Elle utilise la fonction `epilogue:js-link` d'Oppidum pour intégrer des liens vers la librairie AXEL ou jQuery fournies en standard avec Oppidum, ou bien vers les fichiers Javscript contenus dans les ressources du tutorial.
+Cette fonction utilise la fonction `epilogue:js-link` d'Oppidum pour intégrer des liens vers la librairie AXEL ou jQuery fournies en standard avec Oppidum, ou bien vers les fichiers Javscript contenus dans les ressources du tutorial.
 
 ###Créer un menu de navigation primaire####
 
-###Créer un trail###
+Le tutorial définit une fonction `site:navigation` pour générer l'élément `<site:menu>` du gabarit. Celle-ci interroge le contenu de la collection `/db/sites/tutorials/chapters` pour générer un lien vers chaque chapitre. Elle met également en gras le chapitre courant si la commande concerne une page de chapitre.
 
-###Créer un menu d'actions###
+###Créer un chemin de navigation###
 
-Troisième étape: création du “mapping”
+Le tutorial définit une fonction `site:home` pour générer l'élément `<site:home>` du gabarit. Celle-ci affiche un lien vers la page d'acueil si la commande concerne tout autre page.
+
+###Créer un bouton login###
+
+Le tutorial définit une fonction `site:login` pour générer l'élément `<site:login>` du gabarit. Cette fonction gère l'affichage du lien Login ou Logout et du nom de l'utilisateur courant.
+
+
+Troisième étape: le contrôleur
 ------------------
 
-###Créer l'architecture du site####
+Le contrôleur principal du tutorial est le fichier **`controller.xql`**. Chaque application Oppidum doit définir un tel fichier à la racine.
 
-###Définir des droits d'accès####
+En pratique le contrôleur se résume à une ligne :
 
-###Définir des actions par défaut####
+    gen:process($exist:root, $exist:prefix, $exist:controller, $exist:path,
+        'fr', true(), $access, $actions, $mapping)
+        
+Cette commande passe le contrôle à Oppidum avec les informations suffisantes pour analyser la requête du client (contenue dans les variables pré-définies d'aXist `exist:root`, `exist:controller` et `exist:path`) et générer en retour un pipeline.        
 
+L'architecture et une partie de la logique de l'application Web est transmise au contrôleur dans les variables `$mapping`, `$actions` et `$access`. 
+
+Ces variables décrivent respectivement : 
+
+  - le *mapping* REST du site sous forme de collections, de resources et d'actions
+  - des actions par défaut (sucre syntaxique pour simplifier le mapping) 
+  - des règles d'accès
+
+La syntaxe XML de ces variables est définie dans le guide d'Oppidum.
 
 Quelques “pipelines” standards
 ------------------------------
@@ -273,33 +340,32 @@ Quelques “pipelines” standards
 Le plus simple est d'utiliser les attributs `db`, `collection` et `resource` du mapping pour faire pointer l'objet de référence de la commande sur la  resource à afficher :
 
     <site db="/db/sites/tutorial"...
-      <item name="home" collection="pages" resource="home.xml"...
+      <item name="home" collection="pages" resource="home.xml"...>
 
 Utilisez ensuite le script XQuery `oppidum:actions/read.xql` comme modèle. Si la ressource contient directement le HTML à insérer dans la page vous pouvez également utiliser la transformation XSLT `oppidum:views/dump.xsl` :
 
-      <model src="oppidum:actions/read.xql"
-      <view src="oppidum:views/dump.xsl"
+      <model src="oppidum:actions/read.xql"/>
+      <view src="oppidum:views/dump.xsl"/>
       
 Si votre ressource doit-être convertie en HTML pour l'affichage, remplacez la transformation XSLT pour votre propre transformation. Il est d'usage de mettre celle-ci dans le répertoire `views` de votre application :
 
-    <view src="views/ma-transformation.xsl"
+    <view src="views/ma-transformation.xsl"/>
     
 Si la resource que vous souhaitez afficher ainsi est désignée comme item anonyme de collection par l'URL, vous pouvez utiliser la même méthode que ci-dessus mais en utilisant la substitution d'URL dans la syntaxe de l'attribut `resource`. Par exemple si votre URL est de la forme `chapitre/num` où _num_ sert à construire le nom du fichier contenant la resource en ajoutant le suffixe _.xml_, utilisez `$2` (2e segment du chemin de l'URL) pour fabriquer le nom du fichier :
 
-    <site db="/db/sites/tutorial"...
-      <collection name="chapitres" collection="chapitres"...
-        <item resource="$2.xml"...
+    <site db="/db/sites/tutorial"...>
+      <collection name="chapitres" collection="chapitres"...>
+        <item resource="$2.xml"...>
         
 et utilisez ensuite les mêmes types de pipeline que ci-dessus pour afficher la ressource.
 
-Vous pouvez également remplacer le script XQuery servant de modèle par votre propre script. Dans ce cas le code suivant reconstitue le chemin vers la ressource de référence :
+A MIGRER DANS LE GUIDE OPPIDUM
 
-    let $r := request:get-attribute('oppidum.command')/resource
-    let $path-to-ref := string-join(($r/@db, $r/@collection, $r/resource), '/')
-
-Une variante consiste à utiliser la fonction `path-to-ref` du module `http://oppidoc.com/oppiudm/util` :
+Vous pouvez également remplacer le script XQuery servant de modèle par votre propre script. Dans ce cas la méthode `path-to-ref` du module `http://oppidoc.com/oppiudm/util` renvoie dans une chaine de caractère le chemin d'accès à l'objet de référence de la requête, et la méthode `path-to-ref-col` une référence à sa collection : 
 
     let $doc-uri := oppidum:path-to-ref()
+    let $col-uri := oppidum:path-to-ref-col()
+    
 
 ###Modifier une ressource###
 
@@ -314,11 +380,16 @@ Une variante consiste à utiliser la fonction `path-to-ref` du module `http://op
 À faire
 
 
+Packaging et mise en test et en production
+--------
 
+Le packaging consiste à créer une *archive .ZIP* contenant à la fois la configuration et le code de l'application.
 
+C'est cette archvive qui sera restorée dans la base de donnée pour installer l'application sous Tomcat en test ou en production.
 
+A EXPLIQUER
 
-
+En production penser à désactiver l'accès au contenu de la BD par le ExistServlet.
 
 
 

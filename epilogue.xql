@@ -156,7 +156,7 @@ declare function site:home( $cmd as element(), $view as element() ) as element()
 };
  
 (: ======================================================================
-   Generates <site:menu> navigation menu
+   Generates <site:navigation> navigation menu
    Creates one entry for each page in the '/db/sites/tutorial' collection
    Adds a button if the user has the right to create extra pages   
    ======================================================================

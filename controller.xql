@@ -1,8 +1,8 @@
 xquery version "1.0";         
 (: -----------------------------------------------
-	 Oppidum Tutorial controller 
+   Oppidum Tutorial controller 
 
-	 Author: Stéphane Sire <s.sire@free.fr>
+   Author: Stéphane Sire <s.sire@free.fr>
 
    November 2011 - Copyright (c) Oppidoc S.A.R.L
    ----------------------------------------------- :)
