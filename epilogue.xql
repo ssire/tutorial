@@ -70,7 +70,7 @@ declare function site:link( $cmd as element(), $view as element() ) as element()
 :)     
 declare function site:script( $cmd as element(), $view as element() ) as element()*
 {  
-  if ($cmd/@action = ('modifier', 'ajouter')) then
+  if (($cmd/@action = ('modifier', 'ajouter')) and not(oppidum:has-error())) then
     epilogue:js-link('oppidum', (), ('jquery', 'axel', 'photo')) (: jquery and axel with photo plugin :)
   else
     ()
