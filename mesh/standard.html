@@ -2,10 +2,9 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <title>Tutorial Oppidum</title>
-    		<site:link force="true">  
-    			<link rel="stylesheet" href="../resources/css/site.css" type="text/css" charset="utf-8"/>
-    		</site:link>  
-    		<site:script force="true"/>  
+        <site:skin force="true">
+          <link rel="stylesheet" href="../resources/css/site.css" type="text/css" charset="utf-8"/>
+        </site:skin>
     </head>
     <body>
         <header>
@@ -23,23 +22,24 @@
           <site:navigation force="true">
               <li><a href="page1">Page 1</a></li>
               <li><a href="page2">Page 2</a></li>
-          </site:navigation>          
+          </site:navigation>
           </ul>
         </nav>
-        <div id="error" condition="has-error"> 
-  		    <site:error force="true"/>
-  		  </div>
-        <div id="message" condition="has-message"> 
-  		    <site:message force="true"/>
-  		  </div>
-  		  <div id="content">
+        <div id="error" condition="has-error">
+          <site:error force="true"/>
+        </div>
+        <div id="message" condition="has-message">
+          <span class="ui-close" onclick="javascript:document.messageOff()">X</span>
+          <site:message force="true"/>
+        </div>
+        <div id="content">
           <site:content>
             <h1>Contenu</h1>
             <p>Lore ipsum...</p>
           </site:content>
         </div>
         <footer>
-            <p>&#169; 2011 Oppidoc</p>
-        </footer> 
+            <p>&#169; 2013 Oppidoc</p>
+        </footer>
     </body>
 </html>

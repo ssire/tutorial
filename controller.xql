@@ -37,20 +37,22 @@ declare variable $actions := <actions error="models/error.xql">
 (: ======================================================================
                   Site mappings
    ====================================================================== :)                 
-declare variable $mapping := <site db="/db/sites/tutorial" startref="home" supported="login logout install">
+declare variable $mapping := <site db="/db/sites/tutorial" confbase="/db/www/tutorial" startref="home" supported="login logout install" key="tutorial" mode="dev">
   <error mesh="standard"/>
   <item name="home" epilogue="standard" collection="pages" resource="home.xml" supported="modifier" method="POST" template="templates/page">
     <model src="oppidum:actions/read.xql"/>
     <view src="views/page.xsl"/>
     <action name="modifier" epilogue="standard">
       <model src="oppidum:actions/edit.xql"/>
-      <view src="oppidum:views/edit.xsl"/>
+      <view src="views/edit.xsl">
+        <param name="skin" value="editor"/>
+      </view>
     </action>
     <action name="POST">
       <model src="oppidum:actions/write.xql"/>
     </action>    
   </item> 
-  <collection name="chapitres" epilogue="standard" collection="chapters" supported="ajouter" method="POST" template="templates/page">
+  <collection name="chapitres" epilogue="standard" collection="chapters" supported="ajouter" method="POST" template="templates/page" key="tutorial" mode="test">
     <item epilogue="standard" resource="$2.xml" supported="modifier" method="POST" template="templates/page" check="true">
       <model src="oppidum:actions/read.xql"/>
       <view src="views/page.xsl"/>
@@ -80,12 +82,13 @@ declare variable $mapping := <site db="/db/sites/tutorial" startref="home" suppo
       <variant name="GET" format="png"/>
     </item>
   </collection>
-  <collection name="templates">
+  <collection name="templates" db="/db/www/tutorial" collection="templates">
     <model src="oppidum:models/templates.xql"/>
-    <item name="page" collection="templates" resource="page.xhtml">
+    <item name="page" resource="page.xhtml">
       <model src="oppidum:models/template.xql"/>
     </item>
   </collection>
+  <item name="test" resource="file:///mockups/flupload.html"/>
 </site>;
 
 (: call oppidum:process with false() to disable ?debug=true mode :)

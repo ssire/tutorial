@@ -9,5 +9,6 @@ div.t_menu {
   width: 100px;
 }
 
-
-
+body.preview div.t_menu {
+  display: none;
+}

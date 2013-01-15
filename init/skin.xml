@@ -1,0 +1,16 @@
+<!-- ======================================================================
+                              Tutorial site's skin
+     ======================================================================= -->
+<skin xmlns="http://oppidoc.com/oppidum/skin">
+  <handler name="msg-or-err">
+    <predef module="oppidum">flash</predef>
+  </handler>
+  <profile name="*">
+    <link href="css/site.css"/>
+  </profile>
+  <profile name="editor">
+    <link href="css/page.css"/>
+    <predef module="oppidum" avoid="error()">axel-1.3</predef>
+    <predef module="oppidum" avoid="error()">photo</predef>
+  </profile>
+</skin>

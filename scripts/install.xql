@@ -20,11 +20,6 @@ declare variable $policies := <policies xmlns="http://oppidoc.com/oppidum/instal
 
 declare variable $site := <site xmlns="http://oppidoc.com/oppidum/install">
   <collection name="/db/sites/tutorial" policy="read"/>
-  <group name="config">
-    <collection name="/db/sites/tutorial/config" policy="read" inherit="true">
-      <files pattern="init/error.xml"/>
-    </collection>
-  </group>
   <group name="data">
     <collection name="/db/sites/tutorial/pages" policy="write" inherit="true">
       <files pattern="init/home.xml"/>
@@ -32,23 +27,38 @@ declare variable $site := <site xmlns="http://oppidoc.com/oppidum/install">
     <collection name="/db/sites/tutorial/chapters" policy="write-delete-add"/>
     <collection name="/db/sites/tutorial/images" policy="write-delete-add"/>
   </group>
-  <group name="mesh">
-    <collection name="/db/sites/tutorial/mesh" policy="read" inherit="true">
-      <files pattern="mesh/*.html"/>
-    </collection>
-  </group>
-  <group name="templates" policy="read" inherit="true">
-    <files pattern="templates/*" type="text/xml" preserve="true"/>
-  </group>
 </site>;
 
 declare variable $code := <code xmlns="http://oppidoc.com/oppidum/install">
   <collection name="/db/www/tutorial" policy="read" inherit="true"/>
-  <group name="resources">
+  <group name="config">
+    <collection name="/db/www/tutorial/config" policy="read" inherit="true">
+      <files pattern="init/skin.xml"/>
+    </collection>
+  </group>
+  <group name="mesh" mandatory="true">
+    <collection name="/db/www/tutorial/mesh">
+      <files pattern="mesh/*.html"/>
+    </collection>
+  </group>
+  <group name="templates" policy="read" inherit="true">
     <collection name="/db/www/tutorial">
-      <files pattern="resources/**/*.css" preserve="true"/>
+      <files pattern="templates/page.xhtml" type="text/xml" preserve="true"/>
+      <files pattern="oppidum:templates/filter.xsl" type="text/xml" preserve="true"/>
     </collection>
   </group>
 </code>;
 
-install:install("projets/tutorial", $policies, $site, $code, "Tutorial")
+declare variable $static := <static xmlns="http://oppidoc.com/oppidum/install">
+  <group name="resources">
+    <collection name="/db/www/oppidoc">
+      <files pattern="resources/**/*.css" preserve="true"/>
+      <files pattern="resources/**/*.js" preserve="true"/>
+      <files pattern="resources/**/*.png" preserve="true"/>
+      <files pattern="resources/**/*.jpg" preserve="true"/>
+      <files pattern="resources/**/*.gif" preserve="true"/>
+    </collection>
+  </group>
+</static>;
+
+install:install("projets/tutorial", $policies, $site, $code, $static, "Tutorial", ())
