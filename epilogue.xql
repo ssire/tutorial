@@ -135,7 +135,7 @@ declare function site:error( $cmd as element(), $view as element() ) as node()*
 :)
 declare function site:message( $view as element() ) as node()*
 {
- attribute class { 'active' },
+ (: attribute class { 'active' },:)
  for $e in oppidum:get-messages()
  let $type := substring-before($e, ':'), $object := substring-after($e, ':')
  return
