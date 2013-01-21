@@ -1,10 +1,10 @@
 xquery version "1.0";
 (: -----------------------------------------------
-	 Oppidum Tutorial Epilogue
+   Oppidum Tutorial Epilogue
 
-	 Author: Stéphane Sire <s.sire@free.fr>
+   Author: Stéphane Sire <s.sire@free.fr>
 
-   November 2011 - Copyright (c) Oppidoc S.A.R.L
+   January 2013 - (c) Copyright 2013 Oppidoc SARL. All Rights Reserved.
    ----------------------------------------------- :)
 
 declare namespace site = "http://oppidoc.com/oppidum/site";
@@ -30,14 +30,12 @@ declare function site:branch( $cmd as element(), $source as element(), $view as 
 {
  typeswitch($source)
  case element(site:skin) return site:skin($cmd, $view)
- case element(site:link) return site:link($cmd, $view)
- case element(site:script) return site:script($cmd, $view)
  case element(site:login) return site:login($cmd)
  case element(site:home) return site:home($cmd, $view)
  case element(site:navigation) return site:navigation($cmd, $view)
  case element(site:error) return site:error($cmd, $view)
  case element(site:message) return site:message($view)
-(: case element(site:image) return site:image($source):)
+ case element(site:image) return site:image($source)
  default return $view/*[local-name(.) = local-name($source)]/*
  (: default treatment to implicitly manage other modules :)
 };
@@ -49,8 +47,7 @@ declare function site:branch( $cmd as element(), $source as element(), $view as 
 :)
 declare function site:image($image as element()) as element()*
 {
-  concat('images/', $image/@src)
-(:  epilogue:img-link('tutorial', concat('images/', $image/@src)):)
+  epilogue:img-link('tutorial', concat('images/', $image/@src), (), ())
 };
 
 (: ======================================================================
@@ -65,33 +62,6 @@ declare function site:skin( $cmd as element(), $view as element() ) as node()*
   skin:gen-skin('tutorial', oppidum:get-resource($cmd)/@epilogue, $view/@skin),
   if (empty($view/site:links)) then () else skin:rewrite-css-link('tutorial', $view/site:links)
   )
-};
-
-(: ======================================================================
-   Inserts <site:link> static CSS links to the page
-   ======================================================================
-:)
-declare function site:link( $cmd as element(), $view as element() ) as element()*
-{
-  if ($cmd/@action = ('modifier', 'ajouter')) then
-    (
-    epilogue:css-link('tutorial', ('css/site.css', 'css/page.css'), ()),
-    epilogue:css-link('oppidum', (), ('axel', 'photo')) (: axel with photo plugin :)
-    )
-  else
-    epilogue:css-link('tutorial', ('css/site.css', 'css/page.css'), ())
-};
-
-(: ======================================================================
-   Inserts <site:script> static script elements
-   ======================================================================
-:)
-declare function site:script( $cmd as element(), $view as element() ) as element()*
-{
-  if (($cmd/@action = ('modifier', 'ajouter')) and not(oppidum:has-error())) then
-    epilogue:js-link('oppidum', (), ('jquery', 'axel', 'photo')) (: jquery and axel with photo plugin :)
-  else
-    ()
 };
 
 (: ======================================================================
@@ -139,11 +109,7 @@ declare function site:message( $view as element() ) as node()*
  for $e in oppidum:get-messages()
  let $type := substring-before($e, ':'), $object := substring-after($e, ':')
  return
-   if ($type = 'ACTION-DELETE-SUCCESS') then
-     <p>La revue "<span>{$object}</span>" a été supprimée</p>
-   else if ($type = 'ACTION-DELETE-FAILURE') then
-     <p>La revue "<span>{$object}</span>" n'a pas été supprimée car vous n'avez pas saisi le bon numéro</p>
-   else if ($type = 'ACTION-LOGIN-SUCCESS') then
+   if ($type = 'ACTION-LOGIN-SUCCESS') then
      <p>Vous avez été identifié en tant que "<span>{$object}</span>"</p>
    else if ($type = 'ACTION-LOGOUT-SUCCESS') then
      (
@@ -152,17 +118,13 @@ declare function site:message( $view as element() ) as node()*
      )
    else if ($type = 'ACTION-UPDATE-SUCCESS') then
      <p>La ressource a été enregistrée avec succès</p>
-   else if ($type = 'ACTION-ACTIVATED') then
-     <p>Le rédacteur {$object} a été activé</p>
-   else if ($type = 'ACTION-DESACTIVATED') then
-     <p>Le rédacteur {$object} a été désactivé</p>
    else
      ()
 };
 
 (: ======================================================================
-	 Handles <site:home> basic trail
-	 Displays Home on any page other than the /home page
+   Handles <site:home> basic trail
+   Displays Home on any page other than the /home page
    ======================================================================
 :)
 declare function site:home( $cmd as element(), $view as element() ) as element()*
@@ -208,46 +170,46 @@ declare function site:navigation( $cmd as element(), $view as element() ) as ele
    ======================================================================
 :)
 declare function local:render( $cmd as element(), $source as element(), $view as element()* ) as element()
-{		
-	element { node-name($source) }
-	{
-		$source/@*,
-		for $child in $source/node()
-		return		
-		  if ($child instance of text()) then
-	      $child
-	    else
-				(: FIXME: hard-coded 'site:' prefix we should better use namespace-uri :)
-				if (starts-with(xs:string(node-name($child)), 'site:')) then
-					(		
-						if (($child/@force) or
-								($view/*[local-name(.) = local-name($child)])) then
+{
+  element { node-name($source) }
+  {
+    $source/@*,
+    for $child in $source/node()
+    return
+      if ($child instance of text()) then
+        $child
+      else
+        (: FIXME: hard-coded 'site:' prefix we should better use namespace-uri :)
+        if (starts-with(xs:string(node-name($child)), 'site:')) then
+          (
+            if (($child/@force) or
+                ($view/*[local-name(.) = local-name($child)])) then
                  site:branch($cmd, $child, $view)
-						else
-							()
-					)
-				else if ($child/*) then
-				  if ($child/@condition) then
- 				  let $go :=
- 				    if (string($child/@condition) = 'has-error') then
- 				      oppidum:has-error()
- 				    else if (string($child/@condition) = 'has-message') then
- 			        oppidum:has-message()
- 			      else if ($view/*[local-name(.) = substring-after($child/@condition, ':')]) then
-  			        true()
- 			      else
- 			        false()
- 				  return
- 					  if ($go) then
- 						  local:render($cmd, $child, $view)
- 						else
- 						  ()
- 			  else
-           local:render($cmd, $child, $view)  			
-			  else
+            else
+              ()
+          )
+        else if ($child/*) then
+          if ($child/@condition) then
+          let $go :=
+            if (string($child/@condition) = 'has-error') then
+              oppidum:has-error()
+            else if (string($child/@condition) = 'has-message') then
+              oppidum:has-message()
+            else if ($view/*[local-name(.) = substring-after($child/@condition, ':')]) then
+                true()
+            else
+              false()
+          return
+            if ($go) then
+              local:render($cmd, $child, $view)
+            else
+              ()
+        else
+           local:render($cmd, $child, $view)
+        else
          $child
-	}
-};		
+  }
+};
 
 (: ======================================================================
    Epilogue entry point

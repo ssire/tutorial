@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Oppidum : tutorial
 
-    Author: Stéphane Sire <s.sire@free.fr>
+    Author: Stéphane Sire <s.sire@oppidoc.fr>
 
     Renders a page following a quite simple page model
     Returns a <site:view> document
 
-    October 2011
+    January 2013
  -->
 
 <xsl:stylesheet version="1.0"
@@ -42,9 +42,9 @@
     <p><xsl:value-of select="."/></p>
   </xsl:template>
 
-  <!-- all images rooted in a single 'images' resource at site's top level -->
+  <!-- Writes images URL so that they are rooted in a single 'images' resource at site's top level -->
   <xsl:template match="Illustration">
-    <p><img src="{$xslt.base-url}{@src}"/></p>
+    <p><img class="illustration" src="{$xslt.base-url}{@src}"/></p>
   </xsl:template>
   
 </xsl:stylesheet>

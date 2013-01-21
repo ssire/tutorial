@@ -46,6 +46,11 @@ div#content h1 {
   margin-top: 10px;
 }  
 
+img.illustration {
+  max-width: 500px;
+  max-height: 500px;
+}
+
 footer {
   border-top: solid 1px black;
   text-align: center;

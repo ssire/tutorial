@@ -6,7 +6,7 @@
     Returns a <site:view> for loading the AXEL editor.
     Template and Resource URI must be given with absolute path (no URL rewriting).
 
-    OCtober 2011
+    January 2013 - (c) Copyright 2013 Oppidoc SARL. All Rights Reserved.
  -->
 
 <xsl:stylesheet version="1.0"

@@ -26,7 +26,10 @@
           </ul>
         </nav>
         <div id="error" condition="has-error">
-          <site:error force="true"/>
+          <span class="ui-close" onclick="javascript:document.errorOff()">X</span>
+          <site:error force="true">
+              <p>ERROR</p>
+          </site:error>
         </div>
         <div id="message" condition="has-message">
           <span class="ui-close" onclick="javascript:document.messageOff()">X</span>

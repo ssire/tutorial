@@ -1,5 +1,6 @@
 <!-- ======================================================================
                               Tutorial site's skin
+           Depends on Oppidum's skin (/db/www/oppidum/config/skin.xml)
      ======================================================================= -->
 <skin xmlns="http://oppidoc.com/oppidum/skin">
   <handler name="msg-or-err">

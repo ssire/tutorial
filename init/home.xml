@@ -2,4 +2,7 @@
     <Title>Bienvenue dans le tutorial Oppidum</Title>
     <Parag>Ce tutorial est un site Web avec 1 page éditable fixe et une collection de pages éditables</Parag>
     <Parag>En vous identifiant comme administrateur de la base de données, vous pouvez ajouter, modifier, ou supprimer des pages</Parag>
+    <Parag>N'oubliez pas d'utiliser le script d'installation pour installer les groupes data dans Data et config, mesh et templates dans Code !</Parag>
+    <Parag>Vous devez aussi utiliser le script d'installation de Oppidum pour installer le groupe config de Oppidum !</Parag>
+    <Parag>Cette version très simple n'efface pas les images qui ne sont plus liées dans les pages de la base de donnée</Parag>
 </Page>

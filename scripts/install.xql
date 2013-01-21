@@ -11,6 +11,9 @@ import module namespace install = "http://oppidoc.com/oppidum/install" at "../..
 
 declare option exist:serialize "method=xhtml media-type=text/html indent=yes";
 
+(: WARNING: do not forget to set the correct path below webapp here ! :)
+declare variable $local:base := "/projets/tutorial";
+
 declare variable $policies := <policies xmlns="http://oppidoc.com/oppidum/install">
   <user name="membre" password="test" groups="site-member" home=""/> 
   <policy name="read" owner="admin" group="dba" perms="rwur--r--"/>
@@ -61,4 +64,4 @@ declare variable $static := <static xmlns="http://oppidoc.com/oppidum/install">
   </group>
 </static>;
 
-install:install("projets/tutorial", $policies, $site, $code, $static, "Tutorial", ())
+install:install($local:base, $policies, $site, $code, $static, "Tutorial", ())
